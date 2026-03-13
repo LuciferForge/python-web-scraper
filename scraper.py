@@ -145,8 +145,10 @@ class DOMBuilder(HTMLParser):
         if node and node.parent:
             self.current = node.parent
 
+    SKIP_TEXT = {"style", "script", "noscript"}
+
     def handle_data(self, data):
-        if data.strip():
+        if data.strip() and self.current.tag not in self.SKIP_TEXT:
             if self.current.children:
                 # Append to last child or create text node
                 self.current.children[-1].text += " " + data.strip()
